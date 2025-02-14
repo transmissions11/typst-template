@@ -19,7 +19,7 @@ jobs:
       - name: Run Hyperfine benchmark
         id: benchmark
         run: |
-          hyperfine --warmup 25 --runs 500 "typst compile utils/stress_test.typ --root './'" > benchmark_result.txt
+          hyperfine --warmup 10 --runs 100 "typst compile .github/assets/stress_test.typ --root './'" > benchmark_result.txt
           cat benchmark_result.txt
 
       - name: Comment with benchmark results
