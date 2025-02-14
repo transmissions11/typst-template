@@ -3,7 +3,6 @@
 // Macros for common snippets:
 #let def = $:=$
 #let iff = $<==>$
-#let QED = [#h(1fr)$qed$];
 #let note(body) = [*#smallcaps("Note"):*~#body]
 #let case(title, body) = [+ #block[*#title*#parbreak()#body]]
 
