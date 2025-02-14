@@ -2,6 +2,10 @@
 
 // Macros for common snippets:
 #let QED = [#h(1fr)$qed$];
+#let note(body) = {
+  [*#smallcaps("Note"): *]
+  [#body]
+}
 
 // Theme style config:
 #let theme_colors = (
