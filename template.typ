@@ -161,7 +161,7 @@
         #box(
           inset: (bottom: 1pt),
           (
-            page_num
+            calc.min(page_num, 50) // Too many dots is bad for long docs.
               * (
                 box(
                   circle(
