@@ -86,7 +86,7 @@
   // Title:
   title: "An Untitled Note",
   author: "Anonymous",
-  date: "January 1, 1970",
+  date: datetime.today().display("[month repr:long] [day], [year]"),
   title_align: center, // May prefer left for more casual documents.
   toc: false,
   // Headings:
