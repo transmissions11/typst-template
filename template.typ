@@ -154,27 +154,25 @@
   set page(
     // Pretty header on each non-cover page with title & dots for page num.
     header: context {
-      if here().page() > 1 {
-        [
-          *#smallcaps[#title]*
-          #h(1fr)
-          #let (page_num,) = counter(page).get()
-          #box(
-            inset: (bottom: 1pt),
-            (
-              page_num
-                * (
-                  box(
-                    circle(
-                      radius: 2pt,
-                      fill: black,
-                    ),
+      let page_num = here().page()
+      if page_num > 1 [
+        *#smallcaps[#title]*
+        #h(1fr)
+        #box(
+          inset: (bottom: 1pt),
+          (
+            page_num
+              * (
+                box(
+                  circle(
+                    radius: 2pt,
+                    fill: black,
                   ),
-                )
-            ).join(h(2pt)),
-          )
-        ]
-      }
+                ),
+              )
+          ).join(h(2pt)),
+        )
+      ]
     },
     // Pretty footer on every page with author & page num.
     footer: context [
