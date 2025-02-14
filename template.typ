@@ -6,6 +6,7 @@
 #let section = sym.section
 #let note(body) = [*#smallcaps("Note"):*~#body]
 #let case(title, body) = [+ #block[*#title*#parbreak()#body]]
+#let todo(body) = text(red, [*(#body)*])
 
 // Theme style config:
 #let colors = (
