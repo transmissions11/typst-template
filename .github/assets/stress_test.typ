@@ -1,4 +1,4 @@
-#import "../template.typ": *
+#import "../../template.typ": *
 
 #show: themed_document.with(
   title: "Typst Stress Test",
