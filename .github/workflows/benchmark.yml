@@ -20,10 +20,13 @@ jobs:
         id: benchmark
         run: |
           hyperfine --warmup 10 --runs 100 "typst compile .github/assets/stress_test.typ --root './'" | tee benchmark_result.txt
-          echo "result<<EOF" >> $GITHUB_OUTPUT
-          # Remove trailing whitespace from each line and use printf to avoid an extra newline at the end.
-          printf "%s" "$(sed 's/[[:space:]]*$//' benchmark_result.txt)" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+          # Remove trailing whitespace from each line.
+          result=$(sed 's/[[:space:]]*$//' benchmark_result.txt)
+          # Remove a trailing newline if it exists.
+          result="${result%$'\n'}"
+          echo "result<<EOF" >> "$GITHUB_OUTPUT"
+          echo "$result" >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
 
       - name: Comment with benchmark results
         uses: peter-evans/commit-comment@v3
