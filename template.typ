@@ -8,7 +8,7 @@
 }
 
 // Theme style config:
-#let theme_colors = (
+#let colors = (
   cherry_red: rgb("#bf012a"),
   powder_pink: rgb("#FEF2F4"),
   salmon_pink: rgb("#EE6983"),
@@ -20,7 +20,7 @@
   sage: rgb("#98B475"),
 )
 
-#let theme_thmbox_args = (
+#let thmbox_args = (
   titlefmt: title => [
     #place(top + right)[#text(12pt)[#smallcaps[#title]]]
     #sym.wj
@@ -33,45 +33,45 @@
   inset: (top: 0.7em, rest: 8pt),
 )
 
-// Boxes and other utilities:
+// Boxes from ctheorems:
 #let theorem = thmbox(
   "theorem",
   "Theorem",
-  fill: theme_colors.powder_pink,
-  stroke: theme_colors.salmon_pink,
-  ..theme_thmbox_args,
+  fill: colors.powder_pink,
+  stroke: colors.salmon_pink,
+  ..thmbox_args,
 )
 
 #let lemma = thmbox(
   "lemma",
   "Lemma",
-  fill: theme_colors.cream,
-  stroke: theme_colors.peach,
-  ..theme_thmbox_args,
+  fill: colors.cream,
+  stroke: colors.peach,
+  ..thmbox_args,
 )
 
 #let corollary = thmbox(
   "corollary",
   "Corollary",
-  fill: theme_colors.pale_blue,
-  stroke: theme_colors.light_blue,
-  ..theme_thmbox_args,
+  fill: colors.pale_blue,
+  stroke: colors.light_blue,
+  ..thmbox_args,
 )
 
 #let example = thmbox(
   "example",
   "Example",
-  fill: theme_colors.pale_blue,
-  stroke: theme_colors.light_blue,
-  ..theme_thmbox_args,
+  fill: colors.pale_blue,
+  stroke: colors.light_blue,
+  ..thmbox_args,
 )
 
 #let definition = thmbox(
   "definition",
   "Definition",
-  fill: theme_colors.pale_sage,
-  stroke: theme_colors.sage,
-  ..theme_thmbox_args,
+  fill: colors.pale_sage,
+  stroke: colors.sage,
+  ..thmbox_args,
 )
 
 #let proof = thmproof(
@@ -103,9 +103,10 @@
   set document(title: title, author: author) // Metadata.
   set par(justify: true) // Make paragraphs pretty.
 
+
   // Colored links.
   show link: it => {
-    set text(if (type(it.dest) == "label") { theme_colors.cherry_red } else { blue })
+    set text(if (type(it.dest) == "label") { colors.cherry_red } else { blue })
     it
   }
 
@@ -147,7 +148,7 @@
     block([
       #set text(font: heading_font, size: 21pt - (it.level * 3pt))
       #if (it.numbering != none) [
-        #text(theme_colors.cherry_red, counter(heading).display())
+        #text(colors.cherry_red, counter(heading).display())
         #h(1pt) // Space between numbering and heading text.
       ]
       #it.body
@@ -193,7 +194,7 @@
   align(title_align)[
     #set text(font: heading_font)
     #block(spacing: 1.3em)[#text(24pt, weight: "bold")[#title]]
-    #text(14pt)[#author (#text(theme_colors.cherry_red)[#date])]
+    #text(14pt)[#author (#text(colors.cherry_red)[#date])]
   ]
 
   v(1em) // Some vertical space.
@@ -207,11 +208,11 @@
         it.body
       }
       show outline.entry.where(level: 1): it => {
-        text(theme_colors.cherry_red)[#strong[#it]]
+        text(colors.cherry_red)[#strong[#it]]
       }
       show outline.entry: it => {
         h(1em)
-        text(font: heading_font, theme_colors.cherry_red)[#it]
+        text(font: heading_font, colors.cherry_red)[#it]
       }
       it
     }
