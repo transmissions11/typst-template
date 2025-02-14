@@ -1,0 +1,32 @@
+name: Benchmark
+on: [push]
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Install Typst
+        uses: typst-community/setup-typst@v4
+
+      - name: Install Hyperfine
+        uses: taiki-e/install-action@v2
+        with:
+          tool: hyperfine
+
+      - name: Run Hyperfine benchmark
+        id: benchmark
+        run: |
+          hyperfine --warmup 25 --runs 500 "typst compile utils/stress_test.typ" > benchmark_result.txt
+          cat benchmark_result.txt
+
+      - name: Comment with benchmark results
+        uses: peter-evans/commit-comment@v3
+        with:
+          body: |
+            **Hyperfine Benchmark Results:**
+            ```
+            $(cat benchmark_result.txt)
+            ```
