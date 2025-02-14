@@ -1,0 +1,223 @@
+#import "@preview/ctheorems:1.1.3": *
+
+// Macros for common snippets:
+#let QED = [#h(1fr)$qed$];
+
+// Theme style config:
+#let theme_colors = (
+  cherry_red: rgb("#bf012a"),
+  powder_pink: rgb("#FEF2F4"),
+  salmon_pink: rgb("#EE6983"),
+  cream: rgb("#FFF4E0"),
+  peach: rgb("#F4B183"),
+  pale_blue: rgb("#F7FBFC"),
+  light_blue: rgb("#769FCD"),
+  pale_sage: rgb("#F3F7ED"),
+  sage: rgb("#98B475"),
+)
+
+#let theme_thmbox_args = (
+  titlefmt: title => [
+    #place(top + right)[#text(12pt)[#smallcaps[#title]]]
+    #sym.wj
+    #h(0pt, weak: true)
+  ],
+  namefmt: name => [#text(12pt, weight: "bold")[#name]],
+  separator: none,
+  bodyfmt: body => [#v(-1pt)#body],
+  padding: (top: 0em, bottom: 0em),
+  inset: (top: 0.7em, rest: 8pt),
+)
+
+// Boxes and other utilities:
+#let theorem = thmbox(
+  "theorem",
+  "Theorem",
+  fill: theme_colors.powder_pink,
+  stroke: theme_colors.salmon_pink,
+  ..theme_thmbox_args,
+)
+
+#let lemma = thmbox(
+  "lemma",
+  "Lemma",
+  fill: theme_colors.cream,
+  stroke: theme_colors.peach,
+  ..theme_thmbox_args,
+)
+
+#let corollary = thmbox(
+  "corollary",
+  "Corollary",
+  fill: theme_colors.pale_blue,
+  stroke: theme_colors.light_blue,
+  ..theme_thmbox_args,
+)
+
+#let example = thmbox(
+  "example",
+  "Example",
+  fill: theme_colors.pale_blue,
+  stroke: theme_colors.light_blue,
+  ..theme_thmbox_args,
+)
+
+#let definition = thmbox(
+  "definition",
+  "Definition",
+  fill: theme_colors.pale_sage,
+  stroke: theme_colors.sage,
+  ..theme_thmbox_args,
+)
+
+#let proof = thmproof(
+  "proof",
+  "Proof",
+  inset: 0pt,
+  titlefmt: title => [*#smallcaps(title)*],
+)
+
+// Theme loader:
+#let themed_document(
+  // ----------------------------------------------------------------------------------- //
+  // Title:
+  title: "An Untitled Note",
+  author: "Anonymous",
+  date: "January 1, 1970",
+  title_align: center, // May prefer left for more casual documents.
+  toc: false,
+  // Headings:
+  heading_font: "New Computer Modern Sans", // May prefer Libertinus Serif for formality.
+  heading_numbering: sym.section + "1.1.", // Something like Problem 1A) can be handy.
+  // Numbering:
+  eqn_numbering: "(1)", // May prefer something like (I) for style.
+  eqn_ref_numbering: "(1)", // May prefer something like Eq. (1) for clarity.
+  // ----------------------------------------------------------------------------------- //
+  body,
+) = {
+  show: thmrules.with(qed-symbol: $qed$) // Must do this or theorems will format weirdly!
+  set document(title: title, author: author) // Metadata.
+  set par(justify: true) // Make paragraphs pretty.
+
+  // Colored links.
+  show link: it => {
+    set text(if (type(it.dest) == "label") { theme_colors.cherry_red } else { blue })
+    it
+  }
+
+  // Make theorem, equation, etc references links.
+  show ref: it => {
+    if it.element == none { return it }
+
+    if it.element.func() == figure and it.element.kind == "thmenv" {
+      // From: https://github.com/sahasatvik/typst-theorems/theorems.typ
+      let supplement = it.element.supplement
+      if it.citation.supplement != none { supplement = it.citation.supplement }
+      let thms = query(selector(<meta:thmenvcounter>).after(it.element.location()))
+      let number = thmcounters.at(thms.first().location()).latest
+
+      return link(
+        it.target,
+        [#supplement~#numbering(it.element.numbering, ..number)],
+      )
+    } else if it.element.func() == math.equation {
+      return link(it.target, [#counter(math.equation).display(eqn_ref_numbering)])
+    } else { return it }
+  }
+
+  // Number equations, but only number equations with labels attached.
+  set math.equation(numbering: eqn_numbering)
+  show math.equation: it => {
+    // Idea from: https://forum.typst.app/t/how-to-conditionally-enable-equation-numbering-for-labeled-equations
+    if it.block and it.numbering != none and not it.has("label") [
+      #counter(math.equation).update(v => v - 1)
+      #math.equation(it.body, block: true, numbering: none)
+    ] else {
+      it // Only show equation numbers when they are labeled and have numbering.
+    }
+  }
+
+  // Seperate and color heading numbers differently from heading text.
+  set heading(numbering: heading_numbering)
+  show heading: it => {
+    block([
+      #set text(font: heading_font, size: 21pt - (it.level * 3pt))
+      #if (it.numbering != none) [
+        #text(theme_colors.cherry_red, counter(heading).display())
+        #h(1pt) // Space between numbering and heading text.
+      ]
+      #it.body
+      #v(0.4em) // Space below headings.
+    ])
+  }
+
+  set page(
+    // Pretty header on each non-cover page with title & dots for page num.
+    header: context {
+      if here().page() > 1 {
+        [
+          *#smallcaps[#title]*
+          #h(1fr)
+          #let (page_num,) = counter(page).get()
+          #box(
+            inset: (bottom: 1pt),
+            (
+              page_num
+                * (
+                  box(
+                    circle(
+                      radius: 2pt,
+                      fill: black,
+                    ),
+                  ),
+                )
+            ).join(h(2pt)),
+          )
+        ]
+      }
+    },
+    // Pretty footer on every page with author & page num.
+    footer: context [
+      *#smallcaps[#author]*
+      #h(1fr)
+      #counter(page).display(
+        "1 of 1",
+        both: true,
+      )
+    ],
+  )
+
+  // Title, author, date.
+  align(title_align)[
+    #set text(font: heading_font)
+    #block(spacing: 1.3em)[#text(24pt, weight: "bold")[#title]]
+    #text(14pt)[#author (#text(theme_colors.cherry_red)[#date])]
+  ]
+
+  v(1em) // Some vertical space.
+
+  // Pretty table of contents if enabled.
+  if toc {
+    show outline: it => {
+      show heading: it => {
+        set text(font: heading_font)
+        set par(first-line-indent: 0em)
+        it.body
+      }
+      show outline.entry.where(level: 1): it => {
+        text(theme_colors.cherry_red)[#strong[#it]]
+      }
+      show outline.entry: it => {
+        h(1em)
+        text(font: heading_font, theme_colors.cherry_red)[#it]
+      }
+      it
+    }
+
+    outline(fill: repeat[~.], indent: true)
+  }
+
+  v(1em) // Some more vertical space.
+
+  body
+}
