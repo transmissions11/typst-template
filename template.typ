@@ -1,11 +1,10 @@
 #import "@preview/ctheorems:1.1.3": *
 
 // Macros for common snippets:
+#let iff = $<==>$
 #let QED = [#h(1fr)$qed$];
-#let note(body) = {
-  [*#smallcaps("Note"): *]
-  [#body]
-}
+#let note(body) = [*#smallcaps("Note"):*~#body]
+#let case(title, body) = [+ #block[*#title*#parbreak()#body]]
 
 // Theme style config:
 #let colors = (
