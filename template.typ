@@ -3,6 +3,7 @@
 // Macros for common snippets:
 #let def = $:=$
 #let iff = $<==>$
+#let section = sym.section
 #let note(body) = [*#smallcaps("Note"):*~#body]
 #let case(title, body) = [+ #block[*#title*#parbreak()#body]]
 
