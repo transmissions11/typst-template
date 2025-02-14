@@ -3,7 +3,6 @@
 #show: themed_document.with(
   title: "Typst Stress Test",
   author: "Transmissions11",
-  date: "Feburary 13, 2025",
   toc: true,
   heading_numbering: "I.I.",
   title_align: left,
