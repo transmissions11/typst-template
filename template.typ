@@ -1,6 +1,7 @@
 #import "@preview/ctheorems:1.1.3": *
 
 // Macros for common snippets:
+#let def = $:=$
 #let iff = $<==>$
 #let QED = [#h(1fr)$qed$];
 #let note(body) = [*#smallcaps("Note"):*~#body]
