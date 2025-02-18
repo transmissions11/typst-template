@@ -7,6 +7,7 @@
 #let note(body) = [*#smallcaps("Note"):*~#body]
 #let case(title, body) = [+ #block[*#title*#parbreak()#body]]
 #let todo(body) = text(red, [*(#body)*])
+#let bar(x) = $macron(#x)$
 
 // Theme style config:
 #let colors = (
@@ -122,12 +123,9 @@
       let thms = query(selector(<meta:thmenvcounter>).after(it.element.location()))
       let number = thmcounters.at(thms.first().location()).latest
 
-      return link(
-        it.target,
-        [#supplement~#numbering(it.element.numbering, ..number)],
-      )
+      return link(it.target, [#supplement~#numbering(it.element.numbering, ..number)])
     } else if it.element.func() == math.equation {
-      return link(it.target, [#counter(math.equation).display(eqn_ref_numbering)])
+      return link(it.target, [#numbering(eqn_ref_numbering, ..counter(math.equation).at(it.target))])
     } else { return it }
   }
 
