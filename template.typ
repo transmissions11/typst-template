@@ -123,10 +123,10 @@
       let thms = query(selector(<meta:thmenvcounter>).after(it.element.location()))
       let number = thmcounters.at(thms.first().location()).latest
 
-      return link(it.target, [#supplement~#numbering(it.element.numbering, ..number)])
+      link(it.target, [#supplement~#numbering(it.element.numbering, ..number)])
     } else if it.element.func() == math.equation {
-      return link(it.target, [#numbering(eqn_ref_numbering, ..counter(math.equation).at(it.target))])
-    } else { return it }
+      link(it.target, [#numbering(eqn_ref_numbering, ..counter(math.equation).at(it.target))])
+    } else { it }
   }
 
   // Number equations, but only number equations with labels attached.
@@ -136,9 +136,7 @@
     if it.block and it.numbering != none and not it.has("label") [
       #counter(math.equation).update(v => v - 1)
       #math.equation(it.body, block: true, numbering: none)
-    ] else {
-      it // Only show equation numbers when they are labeled and have numbering.
-    }
+    ] else { it } // Only show equation numbers when they are labeled and have numbering.
   }
 
   // Seperate and color heading numbers differently from heading text.
