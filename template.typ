@@ -203,18 +203,19 @@
         set text(font: heading_font)
         set par(first-line-indent: 0em)
         it.body
+        v(1em)
       }
       show outline.entry.where(level: 1): it => {
         text(colors.cherry_red)[#strong[#it]]
       }
       show outline.entry: it => {
-        h(1em)
+        v(0.1em)
         text(font: heading_font, colors.cherry_red)[#it]
       }
       it
     }
 
-    outline(fill: repeat[~.], indent: true)
+    outline()
   }
 
   v(1em) // Some more vertical space.
