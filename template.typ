@@ -203,7 +203,7 @@
         set text(font: heading_font)
         set par(first-line-indent: 0em)
         it.body
-        v(1em)
+        v(0.75em)
       }
       show outline.entry.where(level: 1): it => {
         text(colors.cherry_red)[#strong[#it]]
