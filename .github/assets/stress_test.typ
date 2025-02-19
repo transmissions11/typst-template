@@ -5,6 +5,7 @@
   author: "Transmissions11",
   toc: true,
   heading_numbering: "I.I.",
+  heading_font: "Libertinus Serif",
   title_align: left,
 )
 
