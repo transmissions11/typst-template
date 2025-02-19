@@ -108,7 +108,7 @@
 
   // Colored links.
   show link: it => {
-    set text(if (type(it.dest) == "label") { colors.cherry_red } else { blue })
+    set text(if (type(it.dest) == label) { colors.cherry_red } else { blue })
     it
   }
 
