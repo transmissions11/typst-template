@@ -176,15 +176,17 @@
         )
       ]
     },
-    // Pretty footer on every page with author & page num.
-    footer: context [
-      *#smallcaps[#author]*
-      #h(1fr)
-      #counter(page).display(
+    // Pretty footer with author & page num.
+    footer: context {
+      let page_counter = counter(page)
+      if (page_counter.final().at(0) == 1) { return none }
+      text(weight: "bold", smallcaps[#if here().page() > 1 [#author] else [#sym.arrow.b]])
+      h(1fr)
+      page_counter.display(
         "1 of 1",
         both: true,
       )
-    ],
+    },
   )
 
   // Title, author, date.
