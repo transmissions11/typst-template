@@ -19,7 +19,7 @@ jobs:
       - name: Run Hyperfine benchmark
         id: benchmark
         run: |
-          hyperfine --warmup 10 --runs 100 "typst compile .github/assets/stress_test.typ --root './' --show-output" | tee benchmark_result.txt
+          hyperfine --warmup 10 --runs 100 --show-output "typst compile .github/assets/stress_test.typ --root './'" | tee benchmark_result.txt
           # Remove trailing whitespace from each line.
           result=$(sed 's/[[:space:]]*$//' benchmark_result.txt)
           # Remove a trailing newline if it exists.
