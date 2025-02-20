@@ -1,0 +1,19 @@
+name: Build
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Install Typst
+        uses: typst-community/setup-typst@v4
+      - name: Build stress test
+        id: build-stress-test
+        run: typst compile .github/assets/stress_test.typ --root './'
+
+      - name: Build example main
+        id: build-example-main
+        run: typst compile main.typ
