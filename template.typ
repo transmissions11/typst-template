@@ -8,6 +8,7 @@
 #let case(title, body) = [+ #block[*#title*#parbreak()#body]]
 #let todo(body) = text(red, [*(#body)*])
 #let bar(x) = $macron(#x)$
+#let card(x) = $\#(#x)$
 
 // Theme style config:
 #let colors = (
