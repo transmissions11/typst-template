@@ -11,6 +11,7 @@
 #let todo(body) = [#block(fill: orange, inset: 4pt, text(size: 2em)[*TODO:* #body])]
 #let bar(x) = $macron(#x)$
 #let card(x) = $\#(#x)$
+#let inv(x) = $#x^(-1)$
 
 // Theme style config:
 #let colors = (
