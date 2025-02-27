@@ -3,10 +3,12 @@
 // Macros for common snippets:
 #let def = $:=$
 #let iff = $<==>$
+#let QED = [#h(1fr)$qed$]
 #let section = sym.section
+#let divider = [#line(length: 100%)]
 #let note(body) = [*#smallcaps("Note"):*~#body]
 #let case(title, body) = [+ #block[*#title*#parbreak()#body]]
-#let todo(body) = text(red, [*(#body)*])
+#let todo(body) = [#block(fill: orange, inset: 4pt, text(size: 2em)[*TODO:* #body])]
 #let bar(x) = $macron(#x)$
 #let card(x) = $\#(#x)$
 
