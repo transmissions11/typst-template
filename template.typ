@@ -3,6 +3,9 @@
 // Macros for common snippets:
 #let def = $:=$
 #let iff = $<==>$
+#let bij = $<->$
+#let inj = $arrow.r.hook$
+#let surj = $arrow.r.twohead$
 #let QED = [#h(1fr)$qed$]
 #let section = sym.section
 #let divider = [#line(length: 100%)]
