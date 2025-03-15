@@ -12,7 +12,7 @@
 #let note(body) = [*#smallcaps("Note"):*~#body]
 #let case(title, body) = [+ #block[*#title*#parbreak()#body]]
 #let todo(body) = [#block(fill: orange, inset: 4pt, text(size: 2em)[*TODO:* #body])]
-#let bar(x) = $macron(#x)$
+#let bar(x) = $overline(#x)$
 #let card(x) = $\#(#x)$
 #let inv(x) = $#x^(-1)$
 
