@@ -1,4 +1,5 @@
 #import "@preview/ctheorems:1.1.3": *
+#import "@preview/quick-maths:0.2.1": shorthands
 
 // Macros for common snippets:
 #let def = $:=$
@@ -108,6 +109,11 @@
   // ----------------------------------------------------------------------------------- //
   body,
 ) = {
+  // Shorthands for math equations.
+  show: shorthands.with(
+    ($,,$, $thin$),
+  )
+
   show: thmrules.with(qed-symbol: $qed$) // Must do this or theorems will format weirdly!
   set document(title: title, author: author) // Metadata.
   set par(justify: true) // Make paragraphs pretty.
