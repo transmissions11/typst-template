@@ -102,7 +102,7 @@
   toc: false,
   // Headings:
   heading_font: "New Computer Modern Sans", // May prefer Libertinus Serif for formality.
-  heading_numbering: sym.section + "1.1.", // Something like Problem 1A) can be handy.
+  heading_numberings: (sym.section + "1.1.",), // Per-level numbering; falls back to last.
   // Numbering:
   eqn_numbering: "(1)", // May prefer something like (I) for style.
   eqn_ref_numbering: "(1)", // May prefer something like Eq. (1) for clarity.
@@ -153,12 +153,14 @@
   }
 
   // Seperate and color heading numbers differently from heading text.
-  set heading(numbering: heading_numbering)
+  set heading(numbering: heading_numberings.first())
   show heading: it => {
     block([
       #set text(font: heading_font, size: 21pt - (it.level * 3pt))
       #if (it.numbering != none) [
-        #text(colors.cherry_red, counter(heading).display())
+        #text(colors.cherry_red)[#counter(heading).display(heading_numberings.at(
+          calc.min(it.level, heading_numberings.len()) - 1,
+        ))]
         #h(1pt) // Space between numbering and heading text.
       ]
       #it.body
