@@ -4,7 +4,7 @@
   title: "Typst Stress Test",
   author: "Transmissions11",
   toc: true,
-  heading_numbering: "I.I.",
+  heading_numberings: ("I.I.",),
   heading_font: "Libertinus Serif",
   title_align: left,
 )
@@ -42,7 +42,7 @@
     ]
   ]#label(c + "theo")
 
-  #filler Via #ref(label(c+"proof")), we #filler
+  #filler Via #ref(label(c + "proof")), we #filler
 
   #example("Example")[
     #filler
@@ -69,6 +69,6 @@
     $ a + b + c + sum_n 1 / n < oo $#label(c + "coreqn")
   ]#label(c + "cor")
 
-  Via #ref(label(c+"theo")) and #ref(label(c+"def")) and #ref(label(c+"cor")) we #filler. This also follows via #ref(label(c+"coreqn")).
+  Via #ref(label(c + "theo")) and #ref(label(c + "def")) and #ref(label(c + "cor")) we #filler. This also follows via #ref(label(c + "coreqn")).
 
 ]
