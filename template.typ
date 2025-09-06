@@ -16,7 +16,7 @@
 #let bar(x) = $overline(#x)$
 #let card(x) = $\#(#x)$
 #let inv(x) = $#x^(-1)$
-#let problem(title, collaborators, body) = [
+#let problem(collaborators: "None", title: none, body) = [
   #context if counter(heading).get().first() > 0 [ #pagebreak() ]
   #heading[#title #h(1fr)#text(size: 0.7em, weight: "regular")[#emph[(Collaborators: #collaborators)]]]
   #body
