@@ -107,7 +107,7 @@
   title_align: center, // May prefer left for more casual documents.
   toc: false,
   // Headings:
-  heading_font: "New Computer Modern Sans", // May prefer Libertinus Serif for formality.
+  heading_font: "Libertinus Sans", // Others: New Computer Modern Sans, Libertinus Serif.
   heading_numberings: (sym.section + "1.1.",), // Per-level numbering; falls back to last.
   // Numbering:
   eqn_numbering: "(1)", // May prefer something like (I) for style.
@@ -162,7 +162,7 @@
   set heading(numbering: heading_numberings.first())
   show heading: it => {
     block([
-      #set text(font: heading_font, size: 21pt - (it.level * 3pt))
+      #set text(font: heading_font, size: 21pt - (it.level * 2.5pt))
       #if (it.numbering != none) [
         #text(colors.cherry_red)[#counter(heading).display(heading_numberings.at(
           calc.min(it.level, heading_numberings.len()) - 1,
@@ -213,8 +213,8 @@
   // Title, author, date.
   align(title_align)[
     #set text(font: heading_font)
-    #block(spacing: 1.3em)[#text(24pt, weight: "bold")[#title]]
-    #text(14pt)[#author (#text(colors.cherry_red)[#date])]
+    #block(spacing: 1.3em)[#text(25pt, weight: "bold")[#title]]
+    #text(15pt)[#author (#text(colors.cherry_red)[#date])]
   ]
 
   v(1em) // Some vertical space.
