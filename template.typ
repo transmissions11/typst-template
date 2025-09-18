@@ -161,7 +161,7 @@
         #text(colors.cherry_red)[#counter(heading).display(heading_numberings.at(
           calc.min(it.level, heading_numberings.len()) - 1,
         ))]
-        #h(1pt) // Space between numbering and heading text.
+        #h(3pt) // Space between numbering and heading text.
       ]
       #it.body
       #v(0.4em) // Space below headings.
