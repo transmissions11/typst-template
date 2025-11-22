@@ -19,7 +19,7 @@
 
 // Theme style config:
 #let colors = (
-  cherry_red: rgb("#bf012a"),
+  cherry_red: rgb("#ba0017"),
   powder_pink: rgb("#FEF2F4"),
   salmon_pink: rgb("#EE6983"),
   cream: rgb("#FFF4E0"),
