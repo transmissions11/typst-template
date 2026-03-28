@@ -16,6 +16,7 @@
 #let bar(x) = $overline(#x)$
 #let card(x) = $\#(#x)$
 #let inv(x) = $#x^(-1)$
+#let cmath(color, body) = text(fill: color)[$#body$]
 
 // Theme style config:
 #let colors = (
