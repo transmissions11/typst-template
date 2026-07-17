@@ -116,7 +116,7 @@
   )
 
   show: thmrules.with(qed-symbol: $qed$) // Must do this or theorems will format weirdly!
-  set document(title: title, author: author) // Metadata.
+  set document(title: title, author: if author == none { "Unknown" } else { author }) // Metadata.
   set par(justify: true) // Make paragraphs pretty.
 
 
@@ -209,7 +209,13 @@
   align(title_align)[
     #set text(font: heading_font)
     #block(spacing: 1.3em)[#text(25pt, weight: "bold")[#title]]
-    #text(15pt)[#author (#text(colors.cherry_red)[#date])]
+    #text(15pt)[
+      #if author == none [
+        #text(colors.cherry_red)[#date]
+      ] else [
+        #author (#text(colors.cherry_red)[#date])
+      ]
+    ]
   ]
 
   v(1em) // Some vertical space.
