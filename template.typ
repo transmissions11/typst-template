@@ -20,6 +20,9 @@
 #let cmath(color, body) = text(fill: color)[$#body$]
 // Sidenotes are tagged here and styled by the template, so they can follow its margins.
 #let sidenote(..args) = [#metadata(args)<sidenote>]
+#let sn = sidenote
+#let s = sidenote
+#let fn = footnote
 
 // Theme style config:
 #let margin_presets = (
