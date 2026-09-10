@@ -183,6 +183,7 @@
   // Page margins, widened on the right if sidenotes are enabled.
   let margin = margin_presets.at(if margins == none { "default" } else { margins })
   if sidenotes { margin.right += sidenote_width }
+  let full_width = 100% + (margin.right - margin.left) // Text width plus the sidenote area.
 
   // Sidenotes in the right margin, with outer padding mirroring the left page margin.
   show <sidenote>: it => marge_sidenote.with(
@@ -195,7 +196,7 @@
     // Pretty header on each non-cover page with title & dots for page num.
     header: context {
       let page_num = here().page()
-      if page_num > 1 [
+      if page_num > 1 { block(width: full_width)[
         *#smallcaps[#title]*
         #h(1fr)
         #box(
@@ -212,23 +213,22 @@
               )
           ).join(h(2pt)),
         )
-      ]
+      ] }
     },
     // Pretty footer with author & page num.
     footer: context {
       let page_counter = counter(page)
       if (page_counter.final().at(0) == 1) { return none }
-      text(weight: "bold", smallcaps[#if here().page() > 1 [#author] else [#sym.arrow.b]])
-      h(1fr)
-      page_counter.display(
-        "1 of 1",
-        both: true,
-      )
+      block(width: full_width)[
+        #text(weight: "bold", smallcaps[#if here().page() > 1 [#author] else [#sym.arrow.b]])
+        #h(1fr)
+        #page_counter.display("1 of 1", both: true)
+      ]
     },
   )
 
   // Title, author, date (centered on the page even if the margins are asymmetric).
-  block(width: 100% + (margin.right - margin.left), align(title_align)[
+  block(width: full_width, align(title_align)[
     #set text(font: heading_font)
     #block(spacing: 1.3em)[#text(25pt, weight: "bold")[#title]]
     #text(15pt)[
