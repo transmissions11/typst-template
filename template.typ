@@ -1,5 +1,6 @@
 #import "@preview/ctheorems:1.1.3": *
 #import "@preview/quick-maths:0.2.1": shorthands
+#import "@preview/marge:0.1.0": sidenote as marge_sidenote
 
 // Macros for common snippets:
 #let def = $:=$
@@ -17,8 +18,15 @@
 #let card(x) = $\#(#x)$
 #let inv(x) = $#x^(-1)$
 #let cmath(color, body) = text(fill: color)[$#body$]
+// Sidenotes are tagged here and styled by the template, so they can follow its margins.
+#let sidenote(..args) = [#metadata(args)<sidenote>]
 
 // Theme style config:
+#let margin_presets = (
+  default: (left: 2.5cm, right: 2.5cm, top: 2.5cm, bottom: 2.5cm), // Typst's default for A4.
+  compact: (left: 1.5cm, right: 1.5cm, top: 2cm, bottom: 2cm),
+)
+
 #let colors = (
   cherry_red: rgb("#ba0017"),
   powder_pink: rgb("#FEF2F4"),
@@ -101,6 +109,9 @@
   date: datetime.today().display("[month repr:long] [day], [year]"),
   title_align: center, // May prefer left for more casual documents.
   toc: false,
+  margins: none, // none for the Typst default, or a preset name from `margin_presets`.
+  sidenotes: false, // Reserves extra right margin for #sidenote[...] and moves the TOC there.
+  sidenote_width: 5cm, // Added to the right margin when sidenotes are enabled.
   // Headings:
   heading_font: "Libertinus Sans", // Others: New Computer Modern Sans, Libertinus Serif.
   heading_numberings: (sym.section + "1.1.",), // Per-level numbering; falls back to last.
@@ -122,7 +133,7 @@
 
   // Colored links.
   show link: it => {
-    set text(if (type(it.dest) == label) { colors.cherry_red } else { blue })
+    set text(if (type(it.dest) == str) { blue } else { colors.cherry_red })
     it
   }
 
@@ -169,7 +180,18 @@
     ])
   }
 
+  // Page margins, widened on the right if sidenotes are enabled.
+  let margin = margin_presets.at(if margins == none { "default" } else { margins })
+  if sidenotes { margin.right += sidenote_width }
+
+  // Sidenotes in the right margin, with outer padding mirroring the left page margin.
+  show <sidenote>: it => marge_sidenote.with(
+    numbering: "א",
+    padding: (left: 1.5em, right: margin.left),
+  )(..it.value)
+
   set page(
+    margin: margin,
     // Pretty header on each non-cover page with title & dots for page num.
     header: context {
       let page_num = here().page()
@@ -205,8 +227,8 @@
     },
   )
 
-  // Title, author, date.
-  align(title_align)[
+  // Title, author, date (centered on the page even if the margins are asymmetric).
+  block(width: 100% + (margin.right - margin.left), align(title_align)[
     #set text(font: heading_font)
     #block(spacing: 1.3em)[#text(25pt, weight: "bold")[#title]]
     #text(15pt)[
@@ -216,30 +238,36 @@
         #author (#text(colors.cherry_red)[#date])
       ]
     ]
-  ]
+  ])
 
   v(1em) // Some vertical space.
 
   // Pretty table of contents if enabled.
   if toc {
-    show outline: it => {
-      show heading: it => {
-        set text(font: heading_font)
-        set par(first-line-indent: 0em)
-        it.body
-        v(0.75em)
+    let contents = {
+      show outline: it => {
+        show heading: it => {
+          set text(font: heading_font)
+          set par(first-line-indent: 0em)
+          it.body
+          v(0.75em)
+        }
+        show outline.entry.where(level: 1): it => {
+          text(colors.cherry_red)[#strong[#it]]
+        }
+        show outline.entry: it => {
+          v(0.1em)
+          text(font: heading_font, colors.cherry_red)[#it]
+        }
+        it
       }
-      show outline.entry.where(level: 1): it => {
-        text(colors.cherry_red)[#strong[#it]]
-      }
-      show outline.entry: it => {
-        v(0.1em)
-        text(font: heading_font, colors.cherry_red)[#it]
-      }
-      it
+
+      outline()
     }
 
-    outline()
+    if sidenotes {
+      place(sidenote(numbering: none, box(width: 100%, align(left, contents))))
+    } else { contents }
   }
 
   v(1em) // Some more vertical space.
