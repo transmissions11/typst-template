@@ -192,6 +192,7 @@
   show <sidenote>: it => marge_sidenote.with(
     numbering: "א",
     padding: (left: 1.5em, right: margin.left),
+    format: it => text(weight: "regular", style: "normal", it.default), // Don't inherit bold/italic.
   )(..it.value)
 
   set page(
