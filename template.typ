@@ -18,6 +18,7 @@
 #let card(x) = $\#(#x)$
 #let inv(x) = $#x^(-1)$
 #let cmath(color, body) = text(fill: color)[$#body$]
+#let mics = $upright(mu s)$
 // Sidenotes are tagged here and styled by the template, so they can follow its margins.
 #let sidenote(..args) = [#metadata(args)<sidenote>]
 #let sn = sidenote
@@ -190,9 +191,11 @@
 
   // Sidenotes in the right margin, with outer padding mirroring the left page margin.
   show <sidenote>: it => marge_sidenote.with(
-    numbering: "א",
+    numbering: "1",
+    counter: counter(footnote), // Share one sequence with footnotes so numbers never collide.
     padding: (left: 1.5em, right: margin.left),
-    format: it => text(weight: "regular", style: "normal", it.default), // Don't inherit bold/italic.
+    // Force size/weight/style so notes don't pick up formatting from where their marker sits.
+    format: it => text(size: 9pt, weight: "regular", style: "normal", it.default),
   )(..it.value)
 
   set page(
@@ -266,7 +269,7 @@
         it
       }
 
-      outline()
+      outline(indent: if sidenotes { 0.6em } else { auto }) // Narrow notes can't afford auto indents.
     }
 
     if sidenotes {
