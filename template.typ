@@ -113,6 +113,7 @@
   date: datetime.today().display("[month repr:long] [day], [year]"),
   title_align: center, // May prefer left for more casual documents.
   toc: false,
+  page_per_h1: false, // Start each level-1 heading on a fresh page.
   margins: none, // none for the Typst default, or a preset name from `margin_presets`.
   sidenotes: false, // Reserves extra right margin for #sidenote[...] and moves the TOC there.
   sidenote_width: 5cm, // Added to the right margin when sidenotes are enabled.
@@ -171,6 +172,7 @@
   // Seperate and color heading numbers differently from heading text.
   set heading(numbering: heading_numberings.first())
   show heading: it => {
+    if page_per_h1 and it.level == 1 { pagebreak(weak: true) }
     block([
       #set text(font: heading_font, size: 21pt - (it.level * 2.5pt))
       #if (it.numbering != none) [
