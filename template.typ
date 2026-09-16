@@ -172,7 +172,9 @@
   // Seperate and color heading numbers differently from heading text.
   set heading(numbering: heading_numberings.first())
   show heading: it => {
-    if page_per_h1 and it.level == 1 { pagebreak(weak: true) }
+    if page_per_h1 and it.level == 1 {
+      context if counter(heading).get().first() > 1 { pagebreak(weak: true) } // Not before the first.
+    }
     block([
       #set text(font: heading_font, size: 21pt - (it.level * 2.5pt))
       #if (it.numbering != none) [
