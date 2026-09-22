@@ -4,6 +4,7 @@
 
 // Macros for common snippets:
 #let def = $:=$
+#let st = $"s.t."$
 #let iff = $<==>$
 #let bij = $<->$
 #let inj = $arrow.r.hook$
