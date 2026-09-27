@@ -198,7 +198,12 @@
     counter: counter(footnote), // Share one sequence with footnotes so numbers never collide.
     padding: (left: 1.5em, right: margin.left),
     // Force size/weight/style so notes don't pick up formatting from where their marker sits.
-    format: it => text(size: 9pt, weight: "regular", style: "normal", it.default),
+    // Not `it.default`: it wraps the body in `par`, which drops lists, images, and other blocks.
+    format: it => {
+      set text(size: 9pt, weight: "regular", style: "normal")
+      if it.numbering != none { link(it.source, super(it.counter.display(it.numbering))) + h(0.05em) }
+      it.body
+    },
   )(..it.value)
 
   set page(
