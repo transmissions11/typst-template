@@ -23,8 +23,7 @@
 // Sidenotes share one sequence with footnotes so numbers never collide.
 #let sidenote = marginalia.note.with(
   counter: counter(footnote),
-  anchor-numbering: (..n) => super(numbering("1", ..n)),
-  numbering: (..n) => super(numbering("1", ..n)) + h(0.2em), // Gap before the note text.
+  numbering: (..n) => super(numbering("1", ..n)),
   flush-numbering: true, // Number inline at the start of the note, not hanging into the gap.
   // Force size/weight/style so notes don't pick up formatting from where their marker sits.
   text-style: (size: 9pt, weight: "regular", style: "normal"),
