@@ -33,7 +33,6 @@
 #let fn = footnote
 // Block spanning the text and sidenote columns; notes shift to avoid it. Normal width without sidenotes.
 #let wideblock = marginalia.wideblock
-#let wide = wideblock
 // Use as `#show: page_per_h1` to start every following level-1 heading on a fresh page.
 #let page_per_h1(rest) = { show heading.where(level: 1): it => pagebreak(weak: true) + it; rest }
 
