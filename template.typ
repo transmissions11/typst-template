@@ -213,6 +213,17 @@
     bottom: margin.bottom,
   )
 
+  // Figure captions go in the sidenote column, top-aligned with the figure (from marginalia's README).
+  set figure(gap: 0pt) if sidenotes // Caption is in the margin, so no gap below the figure.
+  set figure.caption(position: top) if sidenotes
+  show figure.caption.where(position: top): it => if sidenotes {
+    sidenote(
+      alignment: "top", counter: none, shift: "avoid", keep-order: true,
+      dy: -0.01pt, // So the caption is placed above wide figures rather than pushed below them.
+      it,
+    )
+  } else { it }
+
   set page(
     // Pretty header on each non-cover page with title & dots for page num.
     header: context {
