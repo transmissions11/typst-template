@@ -1,6 +1,6 @@
 #import "@preview/ctheorems:1.1.3": *
 #import "@preview/quick-maths:0.2.1": shorthands
-#import "@preview/marge:0.1.0": sidenote as marge_sidenote
+#import "@preview/marginalia:0.3.1" as marginalia
 
 // Macros for common snippets:
 #let def = $:=$
@@ -20,11 +20,20 @@
 #let inv(x) = $#x^(-1)$
 #let cmath(color, body) = text(fill: color)[$#body$]
 #let mics = $upright(mu s)$
-// Sidenotes are tagged here and styled by the template, so they can follow its margins.
-#let sidenote(..args) = [#metadata(args)<sidenote>]
+// Sidenotes share one sequence with footnotes so numbers never collide.
+#let sidenote = marginalia.note.with(
+  counter: counter(footnote),
+  numbering: (..n) => super(numbering("1", ..n)),
+  flush-numbering: true, // Number inline at the start of the note, not hanging into the gap.
+  // Force size/weight/style so notes don't pick up formatting from where their marker sits.
+  text-style: (size: 9pt, weight: "regular", style: "normal"),
+)
 #let sn = sidenote
 #let s = sidenote
 #let fn = footnote
+// Block spanning the text and sidenote columns; notes shift to avoid it. Normal width without sidenotes.
+#let wideblock = marginalia.wideblock
+#let wide = wideblock
 // Use as `#show: page_per_h1` to start every following level-1 heading on a fresh page.
 #let page_per_h1(rest) = { show heading.where(level: 1): it => pagebreak(weak: true) + it; rest }
 
@@ -192,22 +201,19 @@
   if sidenotes { margin.right += sidenote_width }
   let full_width = 100% + (margin.right - margin.left) // Text width plus the sidenote area.
 
-  // Sidenotes in the right margin, with outer padding mirroring the left page margin.
-  show <sidenote>: it => marge_sidenote.with(
-    numbering: "1",
-    counter: counter(footnote), // Share one sequence with footnotes so numbers never collide.
-    padding: (left: 1.5em, right: margin.left),
-    // Force size/weight/style so notes don't pick up formatting from where their marker sits.
-    // Not `it.default`: it wraps the body in `par`, which drops lists, images, and other blocks.
-    format: it => {
-      set text(size: 9pt, weight: "regular", style: "normal")
-      if it.numbering != none { link(it.source, super(it.counter.display(it.numbering))) + h(0.05em) }
-      it.body
-    },
-  )(..it.value)
+  // Sidenote column in the right margin, with outer padding mirroring the left page margin.
+  // Marginalia sets the page margins from this, so it must agree with `margin` above.
+  let note_sep = 1.5em // Gap between the text and the sidenote column.
+  show: marginalia.setup.with(
+    inner: (far: margin.left, width: 0pt, sep: 0pt),
+    outer: if sidenotes {
+      (far: margin.left, width: margin.right - margin.left - note_sep, sep: note_sep)
+    } else { (far: margin.right, width: 0pt, sep: 0pt) },
+    top: margin.top,
+    bottom: margin.bottom,
+  )
 
   set page(
-    margin: margin,
     // Pretty header on each non-cover page with title & dots for page num.
     header: context {
       let page_num = here().page()
@@ -281,7 +287,7 @@
     }
 
     if sidenotes {
-      place(sidenote(numbering: none, box(width: 100%, align(left, contents))))
+      place(sidenote(counter: none, alignment: "top", box(width: 100%, align(left, contents))))
     } else { contents }
   }
 
