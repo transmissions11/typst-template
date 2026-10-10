@@ -21,13 +21,40 @@
 #let cmath(color, body) = text(fill: color)[$#body$]
 #let mics = $upright(mu s)$
 // Sidenotes share one sequence with footnotes so numbers never collide.
-#let sidenote = marginalia.note.with(
+#let sidenote_text_style = (size: 9pt, weight: "regular", style: "normal")
+#let sidenote_par_style = (spacing: 1.2em, leading: 0.5em)
+#let _sidenote = marginalia.note.with(
   counter: counter(footnote),
   numbering: (..n) => super(numbering("1", ..n)),
   flush-numbering: true, // Number inline at the start of the note, not hanging into the gap.
   // Force size/weight/style so notes don't pick up formatting from where their marker sits.
-  text-style: (size: 9pt, weight: "regular", style: "normal"),
+  text-style: sidenote_text_style,
+  par-style: sidenote_par_style,
 )
+// Takes marginalia's note options, plus `alignment: "center"` to vertically center the note on
+// the paragraph it's in (or on its own line when not in a paragraph, e.g. in a list item).
+#let sidenote(alignment: "baseline", dy: 0pt, ..args) = {
+  if alignment != "center" { return _sidenote(alignment: alignment, dy: dy, ..args) }
+  context {
+    let here_pos = here().position()
+    let right = marginalia.get-right()
+    let column_end = page.width - right.far - right.width - right.sep
+    // The enclosing paragraph is the last one in the text column starting before us that hasn't ended.
+    let pars = query(selector(par).before(here())).filter(p => {
+      let pos = p.location().position()
+      pos.page == here_pos.page and pos.x < column_end
+    })
+    let top = if pars.len() > 0 and query(selector(<_par_end>).after(pars.last().location()).before(here())).len() == 0 {
+      pars.last().location().position().y
+    } else { here_pos.y }
+    let height = measure(width: right.width, {
+      set text(..sidenote_text_style)
+      set par(..sidenote_par_style)
+      args.pos().last()
+    }).height
+    _sidenote(alignment: "top", dy: (top - here_pos.y) / 2 - height / 2 + dy, ..args)
+  }
+}
 #let sn = sidenote
 #let s = sidenote
 #let fn = footnote
@@ -144,6 +171,7 @@
   show: thmrules.with(qed-symbol: $qed$) // Must do this or theorems will format weirdly!
   set document(title: title, author: if author == none { "Unknown" } else { author }) // Metadata.
   set par(justify: true) // Make paragraphs pretty.
+  show par: it => it + [#metadata(none)<_par_end>] // Lets centered sidenotes find their paragraph.
 
 
   // Colored links.
